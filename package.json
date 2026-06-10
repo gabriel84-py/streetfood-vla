@@ -8,6 +8,8 @@
     "start": "node src/server.js",
     "dev": "NODE_ENV=development nodemon src/server.js",
     "seed": "node scripts/seed.js",
+    "refresh-menu": "node scripts/refresh-menu.js",
+    "import-images": "node scripts/import-images.js",
     "backup": "node scripts/backup.js",
     "create-admin": "node scripts/create-admin.js"
   },

@@ -1,0 +1,29 @@
+{
+  "_comment": "Colle l'URL de l'image de chaque plat (clé = name_fr exact en base). Laisse vide pour ignorer. Pour récupérer une URL : sur la page Uber Eats, clic droit sur la photo du plat > 'Copier l'adresse de l'image' (URL tb-static.uber.com...).",
+
+  "Street Smash": "",
+  "Signature": "",
+  "Daily Street Smash": "",
+  "Street Vegan": "",
+
+  "Tacos L": "",
+  "Tacos XL": "",
+  "Tacos XXL": "",
+
+  "Frite de panisse x5 🍟": "",
+  "Tenders maison": "",
+  "Sticks Mozzarella": "",
+  "Nuggets": "",
+  "Chilli Cheese 🌶️": "",
+  "Onion rings": "",
+
+  "Salade César": "",
+
+  "Smash Nut 🤎🍫": "",
+
+  "Coca-Cola": "",
+  "Coca-Cola Cherry": "",
+  "Orangina 💛": "",
+  "Oasis tropical 🧡": "",
+  "Ice tea": ""
+}

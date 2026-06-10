@@ -9,6 +9,7 @@ require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const db = require('../src/db/database');
 const { setSetting, getSetting } = require('../src/utils/settings');
+const { categories: MENU_CATEGORIES, items: MENU_ITEMS } = require('./menu-data');
 
 // ─── 1. ADMIN ────────────────────────────────────────────────────────────────
 async function seedAdmin() {
@@ -149,56 +150,7 @@ function seedCategories() {
     return null; // signale qu'on ne seed pas non plus les items
   }
 
-  const categories = [
-    {
-      slug: 'smash-burgers',
-      name_fr: 'Smash Burgers', name_en: 'Smash Burgers', name_it: 'Smash Burger',
-      description_fr: 'Buns brioché, viande Limousine française. Tout est préparé minute.',
-      description_en: 'Brioche buns, French Limousine beef. Made to order.',
-      description_it: 'Pane brioche, manzo Limousine francese. Preparato al momento.',
-      display_order: 1,
-    },
-    {
-      slug: 'tacos',
-      name_fr: 'Tacos', name_en: 'Tacos', name_it: 'Tacos',
-      description_fr: 'Galette de blé, viandes au choix, sauces maison.',
-      description_en: 'Wheat tortilla, your choice of meat, homemade sauces.',
-      description_it: 'Tortilla di grano, carne a scelta, salse fatte in casa.',
-      display_order: 2,
-    },
-    {
-      slug: 'accompagnements',
-      name_fr: 'Accompagnements', name_en: 'Sides', name_it: 'Contorni',
-      description_fr: 'Frites maison, panisses provençales, onion rings.',
-      description_en: 'Homemade fries, Provençal panisses, onion rings.',
-      description_it: 'Patatine fatte in casa, panisse provenzali, onion rings.',
-      display_order: 3,
-    },
-    {
-      slug: 'salades',
-      name_fr: 'Salades', name_en: 'Salads', name_it: 'Insalate',
-      description_fr: 'Pour les amateurs de fraîcheur.',
-      description_en: 'For those who love it fresh.',
-      description_it: 'Per chi ama il fresco.',
-      display_order: 4,
-    },
-    {
-      slug: 'desserts',
-      name_fr: 'Desserts', name_en: 'Desserts', name_it: 'Dessert',
-      description_fr: 'Faits maison, ça finit toujours mieux.',
-      description_en: 'Homemade, it always finishes better.',
-      description_it: 'Fatti in casa, finiscono sempre meglio.',
-      display_order: 5,
-    },
-    {
-      slug: 'boissons',
-      name_fr: 'Boissons', name_en: 'Drinks', name_it: 'Bevande',
-      description_fr: '',
-      description_en: '',
-      description_it: '',
-      display_order: 6,
-    },
-  ];
+  const categories = MENU_CATEGORIES;
 
   const stmt = db.prepare(`
     INSERT INTO menu_categories (slug, name_fr, name_en, name_it, description_fr, description_en, description_it, display_order, is_visible)
@@ -220,39 +172,8 @@ function seedItems() {
   const catBySlug = {};
   cats.forEach((c) => { catBySlug[c.slug] = c.id; });
 
-  // Données issues du dossier (menu_street_food_vla.webp + dossier markdown)
-  const items = [
-    // Smash Burgers
-    { cat: 'smash-burgers', name_fr: 'Smash Signature', name_en: 'Signature Smash', name_it: 'Smash Signature', desc_fr: 'Double steak smashé, cheddar fondu, oignons confits, sauce maison.', desc_en: 'Double smashed patty, melted cheddar, caramelized onions, house sauce.', desc_it: 'Doppio hamburger smashato, cheddar fuso, cipolle caramellate, salsa della casa.', price: '12,90 €', featured: 1, order: 1 },
-    { cat: 'smash-burgers', name_fr: 'Daily Street Smash', name_en: 'Daily Street Smash', name_it: 'Daily Street Smash', desc_fr: 'Le burger du mois, créé par notre chef. Disponible tout le mois.', desc_en: 'Burger of the month, crafted by our chef. Available all month.', desc_it: 'Hamburger del mese, creato dal nostro chef. Disponibile tutto il mese.', price: '13,90 €', featured: 1, order: 2 },
-    { cat: 'smash-burgers', name_fr: 'Cheese Smash', name_en: 'Cheese Smash', name_it: 'Cheese Smash', desc_fr: 'Steak smashé, double cheddar, cornichons, sauce signature.', desc_en: 'Smashed patty, double cheddar, pickles, signature sauce.', desc_it: 'Hamburger smashato, doppio cheddar, sottaceti, salsa signature.', price: '10,90 €', order: 3 },
-    { cat: 'smash-burgers', name_fr: 'Veggie Smash', name_en: 'Veggie Smash', name_it: 'Veggie Smash', desc_fr: 'Steak végétal, cheddar, salade, tomate, oignons rouges, sauce maison.', desc_en: 'Veggie patty, cheddar, lettuce, tomato, red onions, house sauce.', desc_it: 'Hamburger vegetale, cheddar, lattuga, pomodoro, cipolle rosse, salsa della casa.', price: '11,90 €', veggie: 1, order: 4 },
-    { cat: 'smash-burgers', name_fr: 'Bacon Smash', name_en: 'Bacon Smash', name_it: 'Bacon Smash', desc_fr: 'Double steak, bacon croustillant, cheddar, sauce BBQ maison.', desc_en: 'Double patty, crispy bacon, cheddar, house BBQ sauce.', desc_it: 'Doppio hamburger, bacon croccante, cheddar, salsa BBQ della casa.', price: '13,50 €', order: 5 },
-
-    // Tacos
-    { cat: 'tacos', name_fr: 'Tacos XL', name_en: 'Tacos XL', name_it: 'Tacos XL', desc_fr: 'Galette XL, 2 viandes au choix, frites, fromage fondu, sauce maison.', desc_en: 'XL tortilla, 2 meats of your choice, fries, melted cheese, house sauce.', desc_it: 'Tortilla XL, 2 carni a scelta, patatine, formaggio fuso, salsa della casa.', price: '11,50 €', featured: 1, order: 1 },
-    { cat: 'tacos', name_fr: 'Tacos Classic', name_en: 'Classic Tacos', name_it: 'Tacos Classico', desc_fr: 'Galette, 1 viande, frites, fromage fondu, sauce maison.', desc_en: 'Tortilla, 1 meat, fries, melted cheese, house sauce.', desc_it: 'Tortilla, 1 carne, patatine, formaggio fuso, salsa della casa.', price: '8,90 €', order: 2 },
-    { cat: 'tacos', name_fr: 'Tacos Veggie', name_en: 'Veggie Tacos', name_it: 'Tacos Veggie', desc_fr: 'Galette, légumes grillés, fromage fondu, sauce maison.', desc_en: 'Tortilla, grilled vegetables, melted cheese, house sauce.', desc_it: 'Tortilla, verdure grigliate, formaggio fuso, salsa della casa.', price: '9,50 €', veggie: 1, order: 3 },
-
-    // Accompagnements
-    { cat: 'accompagnements', name_fr: 'Frites maison', name_en: 'Homemade fries', name_it: 'Patatine fatte in casa', desc_fr: 'Coupées et dorées sur place.', desc_en: 'Cut and fried on-site.', desc_it: 'Tagliate e fritte sul posto.', price: '4,50 €', order: 1 },
-    { cat: 'accompagnements', name_fr: 'Frites de panisses', name_en: 'Panisse fries', name_it: 'Panisse fritte', desc_fr: 'Spécialité provençale, à base de farine de pois chiches. Le must.', desc_en: 'Provençal specialty, made from chickpea flour. A must-try.', desc_it: 'Specialità provenzale, a base di farina di ceci. Da provare.', price: '5,50 €', veggie: 1, featured: 1, order: 2 },
-    { cat: 'accompagnements', name_fr: 'Onion rings', name_en: 'Onion rings', name_it: 'Onion rings', desc_fr: 'Croustillants, panure maison.', desc_en: 'Crispy, homemade breading.', desc_it: 'Croccanti, panatura fatta in casa.', price: '5,50 €', veggie: 1, order: 3 },
-    { cat: 'accompagnements', name_fr: 'Frites + Panisses', name_en: 'Fries + Panisses', name_it: 'Patatine + Panisse', desc_fr: 'Le combo gagnant.', desc_en: 'The winning combo.', desc_it: 'La combo vincente.', price: '6,50 €', veggie: 1, order: 4 },
-
-    // Salades
-    { cat: 'salades', name_fr: 'Salade César', name_en: 'Caesar Salad', name_it: 'Insalata Cesar', desc_fr: 'Salade verte, poulet grillé, parmesan, croûtons, sauce César maison.', desc_en: 'Green salad, grilled chicken, parmesan, croutons, homemade Caesar dressing.', desc_it: 'Insalata verde, pollo grigliato, parmigiano, crostini, salsa Cesar della casa.', price: '11,90 €', order: 1 },
-    { cat: 'salades', name_fr: 'Salade Veggie', name_en: 'Veggie Salad', name_it: 'Insalata Veggie', desc_fr: 'Mesclun, légumes de saison, fromage, croûtons.', desc_en: 'Mixed greens, seasonal vegetables, cheese, croutons.', desc_it: 'Insalata mista, verdure di stagione, formaggio, crostini.', price: '9,90 €', veggie: 1, order: 2 },
-
-    // Desserts
-    { cat: 'desserts', name_fr: 'Mousse au chocolat maison', name_en: 'Homemade chocolate mousse', name_it: 'Mousse al cioccolato fatta in casa', desc_fr: 'La fierté de la maison. Tout en douceur.', desc_en: 'House pride. All about the smoothness.', desc_it: 'L\'orgoglio della casa. Tutta morbidezza.', price: '4,50 €', veggie: 1, order: 1 },
-    { cat: 'desserts', name_fr: 'Cookie maison', name_en: 'Homemade cookie', name_it: 'Cookie fatto in casa', desc_fr: 'Pépites de chocolat, cuit du jour.', desc_en: 'Chocolate chips, baked daily.', desc_it: 'Gocce di cioccolato, cotto al giorno.', price: '3,00 €', veggie: 1, order: 2 },
-
-    // Boissons
-    { cat: 'boissons', name_fr: 'Sodas', name_en: 'Sodas', name_it: 'Bibite', desc_fr: 'Coca, Coca Zero, Fanta, Sprite, Ice Tea (33 cl).', desc_en: 'Coke, Diet Coke, Fanta, Sprite, Ice Tea (33 cl).', desc_it: 'Coca, Coca Zero, Fanta, Sprite, Ice Tea (33 cl).', price: '3,00 €', order: 1 },
-    { cat: 'boissons', name_fr: 'Eau plate / gazeuse', name_en: 'Still / sparkling water', name_it: 'Acqua naturale / frizzante', desc_fr: '50 cl.', desc_en: '50 cl.', desc_it: '50 cl.', price: '2,50 €', order: 2 },
-    { cat: 'boissons', name_fr: 'Bière artisanale', name_en: 'Craft beer', name_it: 'Birra artigianale', desc_fr: 'Sélection locale, 33 cl.', desc_en: 'Local selection, 33 cl.', desc_it: 'Selezione locale, 33 cl.', price: '5,00 €', order: 3 },
-  ];
+  // Carte reconstituée fidèlement depuis Uber Eats (cf. scripts/menu-data.js)
+  const items = MENU_ITEMS;
 
   const stmt = db.prepare(`
     INSERT INTO menu_items
